@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "name": "TrinityFormTools",
+  "version": "1.0.0",
+  "description": "Ferramentas para preencher formulários: CPF válido, email e telefone com DDD.",
+  "author": "Trinity Web",
+  "permissions": [
+    "contextMenus",
+    "activeTab"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content-script.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "48": "icon48.png",
+    "96": "icon96.png"
+  }
+}
