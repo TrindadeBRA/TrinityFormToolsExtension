@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "TrinityFormTools",
+  "name": "TrinityForm",
   "version": "1.0.0",
-  "description": "Ferramentas para preencher formulários: CPF válido, email e telefone com DDD.",
+  "description": "Preencha formulários rapidamente com dados de teste realistas: CPF válido, nome, e-mail e telefone brasileiro (com DDD).",
   "author": "Trinity Web",
   "permissions": [
     "contextMenus",
@@ -21,5 +21,12 @@
   "icons": {
     "48": "icon48.png",
     "96": "icon96.png"
+  },
+  "browser_action": {
+    "default_icon": {
+      "48": "icon48.png",
+      "96": "icon96.png"
+    },
+    "default_title": "TrinityForm: Preencha formulários rapidamente com dados de teste brasileiros realistas. Clique com o botão direito em campos de formulário."
   }
 }
