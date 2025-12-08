@@ -13,6 +13,9 @@ Thumbs.db
 *.swo
 *~
 
+# Build files
+*.zip
+
 # Original favicon (optional - keep if needed)
 # favicon.webp
 
