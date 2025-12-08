@@ -178,26 +178,56 @@ function insertValueIntoElement(element, value) {
     return;
   }
 
-  const start = element.selectionStart ?? element.value.length;
-  const end = element.selectionEnd ?? element.value.length;
+  // Ensure element is focused before manipulating selection
+  if (document.activeElement !== element) {
+    element.focus();
+  }
+
+  // Get current selection position
+  let start = element.selectionStart;
+  let end = element.selectionEnd;
+
+  // Fallback if selectionStart/End are null or undefined
+  if (start === null || start === undefined) {
+    start = element.value.length;
+  }
+  if (end === null || end === undefined) {
+    end = element.value.length;
+  }
 
   const before = element.value.substring(0, start);
   const after = element.value.substring(end);
 
+  // Set the new value
   element.value = before + value + after;
 
   // Set cursor position after inserted value
-  const newPosition = before.length + value.length;
-  if (element.setSelectionRange) {
-    element.setSelectionRange(newPosition, newPosition);
+  // Only use setSelectionRange for text-like inputs
+  const inputType = element.type ? element.type.toLowerCase() : 'text';
+  const supportsSelection = ['text', 'email', 'password', 'search', 'tel', 'url'].includes(inputType) ||
+                            element.tagName.toLowerCase() === 'textarea';
+
+  if (supportsSelection && element.setSelectionRange) {
+    try {
+      const newPosition = before.length + value.length;
+      element.setSelectionRange(newPosition, newPosition);
+    } catch (error) {
+      // Ignore InvalidStateError - element might not be in a valid state for selection
+      // The value was already set, so the operation can continue
+      console.debug('Não foi possível definir a posição do cursor:', error.message);
+    }
   }
 
   // Dispatch input and change events for framework compatibility
-  const inputEvent = new Event("input", { bubbles: true });
-  const changeEvent = new Event("change", { bubbles: true });
-  
-  element.dispatchEvent(inputEvent);
-  element.dispatchEvent(changeEvent);
+  try {
+    const inputEvent = new Event("input", { bubbles: true, cancelable: true });
+    const changeEvent = new Event("change", { bubbles: true, cancelable: true });
+    
+    element.dispatchEvent(inputEvent);
+    element.dispatchEvent(changeEvent);
+  } catch (error) {
+    console.debug('Erro ao disparar eventos:', error.message);
+  }
 }
 
 /**

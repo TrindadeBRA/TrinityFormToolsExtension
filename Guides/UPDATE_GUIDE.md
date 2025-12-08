@@ -196,3 +196,4 @@ v1.1.0 - Novas funcionalidades
 
 **Resumo:** Sim, é manual pelo site. Sempre atualize a versão no manifest.json antes de fazer upload!
 
+
