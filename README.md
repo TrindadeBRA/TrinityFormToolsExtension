@@ -37,6 +37,7 @@ Extensão compatível com **Firefox e Chrome** que adiciona opções no menu de 
    - **Inserir CPF válido** - Gera um CPF válido sem pontuação
    - **Inserir Email** - Gera um email aleatório
    - **Inserir Telefone com DDD** - Gera um telefone no formato (XX) XXXXX-XXXX
+   - **Inserir Nome** - Gera um nome brasileiro aleatório
 4. O valor será gerado e inserido automaticamente no campo
 
 ## ✨ Funcionalidades
@@ -55,6 +56,12 @@ Extensão compatível com **Firefox e Chrome** que adiciona opções no menu de 
 - Gera telefones com DDD válidos do Brasil
 - Formato: `(XX) XXXXX-XXXX`
 - DDDs incluídos: 11, 21, 31, 41, 47, 48, 51, 61, 71, 81, 85
+
+### Nome
+- Gera nomes brasileiros aleatórios realistas
+- Formato: Primeiro Nome + Sobrenome (às vezes com segundo sobrenome)
+- Exemplos: `Maria Silva`, `João Santos Oliveira`, `Ana Paula Ferreira`
+- Lista extensa de nomes e sobrenomes comuns no Brasil
 
 ## 🔧 Características técnicas
 

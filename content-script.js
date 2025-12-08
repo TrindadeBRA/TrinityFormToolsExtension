@@ -11,7 +11,8 @@ const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 const ACTIONS = {
   INSERT_CPF: "insertCpf",
   INSERT_EMAIL: "insertEmail",
-  INSERT_PHONE: "insertPhone"
+  INSERT_PHONE: "insertPhone",
+  INSERT_NAME: "insertName"
 };
 
 // Valid Brazilian area codes (DDD)
@@ -30,6 +31,26 @@ const EMAIL_USERNAMES = [
 const EMAIL_DOMAINS = [
   "gmail.com", "hotmail.com", "yahoo.com", 
   "outlook.com", "teste.com", "exemplo.com"
+];
+
+// Brazilian first names (common names)
+const FIRST_NAMES = [
+  "Ana", "Maria", "João", "José", "Carlos", "Paulo", "Pedro", "Lucas",
+  "Fernando", "Ricardo", "Rafael", "Bruno", "Felipe", "Gabriel", "Thiago",
+  "Marcos", "André", "Rodrigo", "Daniel", "Fábio", "Juliana", "Patrícia",
+  "Mariana", "Camila", "Amanda", "Bruna", "Letícia", "Beatriz", "Carolina",
+  "Larissa", "Vanessa", "Priscila", "Renata", "Tatiana", "Cristina", "Sandra",
+  "Adriana", "Fernanda", "Roberta", "Luciana", "Claudia", "Márcia", "Sônia"
+];
+
+// Brazilian last names (common surnames)
+const LAST_NAMES = [
+  "Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Ferreira", "Alves",
+  "Pereira", "Lima", "Gomes", "Ribeiro", "Carvalho", "Almeida", "Lopes",
+  "Soares", "Fernandes", "Vieira", "Barbosa", "Rocha", "Dias", "Monteiro",
+  "Cardoso", "Teixeira", "Mendes", "Freitas", "Martins", "Nascimento",
+  "Moreira", "Araújo", "Machado", "Costa", "Ramos", "Reis", "Azevedo",
+  "Correia", "Cavalcanti", "Nunes", "Moraes", "Castro", "Pinto", "Araújo"
 ];
 
 /**
@@ -104,6 +125,33 @@ function generatePhone() {
 }
 
 /**
+ * Generates a random Brazilian name (first name + last name)
+ * @returns {string} Full name
+ */
+function generateName() {
+  const firstName = FIRST_NAMES[
+    Math.floor(Math.random() * FIRST_NAMES.length)
+  ];
+  const lastName = LAST_NAMES[
+    Math.floor(Math.random() * LAST_NAMES.length)
+  ];
+
+  // Sometimes add a second last name (common in Brazil)
+  const hasSecondLastName = Math.random() > 0.5;
+  if (hasSecondLastName) {
+    const secondLastName = LAST_NAMES[
+      Math.floor(Math.random() * LAST_NAMES.length)
+    ];
+    // Make sure second last name is different
+    if (secondLastName !== lastName) {
+      return `${firstName} ${lastName} ${secondLastName}`;
+    }
+  }
+
+  return `${firstName} ${lastName}`;
+}
+
+/**
  * Checks if an element is editable
  * @param {HTMLElement} element - DOM element to check
  * @returns {boolean} True if element is editable
@@ -169,6 +217,9 @@ function handleMessage(message) {
       break;
     case ACTIONS.INSERT_PHONE:
       value = generatePhone();
+      break;
+    case ACTIONS.INSERT_NAME:
+      value = generateName();
       break;
     default:
       return;

@@ -11,21 +11,24 @@ const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 const MENU_IDS = {
   CPF: "insert-cpf",
   EMAIL: "insert-email",
-  PHONE: "insert-phone"
+  PHONE: "insert-phone",
+  NAME: "insert-name"
 };
 
 // Context menu item titles (Portuguese - visible to user)
 const MENU_TITLES = {
-  CPF: "Inserir CPF válido",
+  CPF: "Inserir CPF",
   EMAIL: "Inserir Email",
-  PHONE: "Inserir Telefone com DDD"
+  PHONE: "Inserir Telefone",
+  NAME: "Inserir Nome"
 };
 
 // Message actions
 const ACTIONS = {
   INSERT_CPF: "insertCpf",
   INSERT_EMAIL: "insertEmail",
-  INSERT_PHONE: "insertPhone"
+  INSERT_PHONE: "insertPhone",
+  INSERT_NAME: "insertName"
 };
 
 /**
@@ -52,6 +55,13 @@ function initializeContextMenus() {
     title: MENU_TITLES.PHONE,
     contexts: ["editable"]
   });
+
+  // Create Name menu item
+  browserAPI.contextMenus.create({
+    id: MENU_IDS.NAME,
+    title: MENU_TITLES.NAME,
+    contexts: ["editable"]
+  });
 }
 
 /**
@@ -69,6 +79,9 @@ function handleContextMenuClick(info, tab) {
       break;
     case MENU_IDS.PHONE:
       action = ACTIONS.INSERT_PHONE;
+      break;
+    case MENU_IDS.NAME:
+      action = ACTIONS.INSERT_NAME;
       break;
     default:
       return;
