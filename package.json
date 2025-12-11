@@ -4,7 +4,10 @@
   "description": "Extensão para preencher formulários com dados de teste brasileiros",
   "license": "MIT",
   "scripts": {
-    "build": "node build.js"
+    "build": "yarn build:all",
+    "build:chrome": "node build.js chrome",
+    "build:firefox": "node build.js firefox",
+    "build:all": "yarn build:chrome && yarn build:firefox"
   },
   "devDependencies": {},
   "author": "Trinity Web"
