@@ -1,5 +1,5 @@
 /**
- * TrinityFormTools - Background Script
+ * TrinityFormTools - Service Worker (Manifest V3)
  * Manages context menu creation and message handling
  * Compatible with both Firefox and Chrome
  */
@@ -92,7 +92,15 @@ function handleContextMenuClick(info, tab) {
   }
 }
 
-// Initialize context menus on extension load
+// Initialize context menus on service worker startup/installation
+// In MV3, service workers restart often, so we need to handle this properly
+if (browserAPI.runtime.onInstalled) {
+  browserAPI.runtime.onInstalled.addListener(() => {
+    initializeContextMenus();
+  });
+}
+
+// Also initialize on service worker startup (for Chrome MV3)
 initializeContextMenus();
 
 // Listen for context menu clicks
