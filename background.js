@@ -10,6 +10,7 @@ const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 // Context menu item IDs
 const MENU_IDS = {
   CPF: "insert-cpf",
+  CNPJ: "insert-cnpj",
   EMAIL: "insert-email",
   PHONE: "insert-phone",
   NAME: "insert-name"
@@ -18,6 +19,7 @@ const MENU_IDS = {
 // Context menu item titles (Portuguese - visible to user)
 const MENU_TITLES = {
   CPF: "Inserir CPF",
+  CNPJ: "Inserir CNPJ",
   EMAIL: "Inserir Email",
   PHONE: "Inserir Telefone",
   NAME: "Inserir Nome"
@@ -26,6 +28,7 @@ const MENU_TITLES = {
 // Message actions
 const ACTIONS = {
   INSERT_CPF: "insertCpf",
+  INSERT_CNPJ: "insertCnpj",
   INSERT_EMAIL: "insertEmail",
   INSERT_PHONE: "insertPhone",
   INSERT_NAME: "insertName"
@@ -39,6 +42,13 @@ function initializeContextMenus() {
   browserAPI.contextMenus.create({
     id: MENU_IDS.CPF,
     title: MENU_TITLES.CPF,
+    contexts: ["editable"]
+  });
+
+  // Create CNPJ menu item
+  browserAPI.contextMenus.create({
+    id: MENU_IDS.CNPJ,
+    title: MENU_TITLES.CNPJ,
     contexts: ["editable"]
   });
 
@@ -73,6 +83,9 @@ function handleContextMenuClick(info, tab) {
   switch (info.menuItemId) {
     case MENU_IDS.CPF:
       action = ACTIONS.INSERT_CPF;
+      break;
+    case MENU_IDS.CNPJ:
+      action = ACTIONS.INSERT_CNPJ;
       break;
     case MENU_IDS.EMAIL:
       action = ACTIONS.INSERT_EMAIL;

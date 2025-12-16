@@ -10,6 +10,7 @@ const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 // Message actions from background script
 const ACTIONS = {
   INSERT_CPF: "insertCpf",
+  INSERT_CNPJ: "insertCnpj",
   INSERT_EMAIL: "insertEmail",
   INSERT_PHONE: "insertPhone",
   INSERT_NAME: "insertName"
@@ -85,6 +86,40 @@ function generateCPF() {
   if (digit2 === 10 || digit2 === 11) {
     digit2 = 0;
   }
+
+  return [...digits, digit1, digit2].join("");
+}
+
+/**
+ * Generates a valid CNPJ (Brazilian company tax ID) without formatting
+ * @returns {string} 14-digit CNPJ number
+ */
+function generateCNPJ() {
+  const digits = [];
+
+  // Generate 12 random digits
+  for (let i = 0; i < 12; i++) {
+    digits[i] = Math.floor(Math.random() * 10);
+  }
+
+  // Calculate first verification digit
+  const weights1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+  let sum = 0;
+  for (let i = 0; i < 12; i++) {
+    sum += digits[i] * weights1[i];
+  }
+  let digit1 = sum % 11;
+  digit1 = digit1 < 2 ? 0 : 11 - digit1;
+
+  // Calculate second verification digit
+  const weights2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+  sum = 0;
+  for (let i = 0; i < 12; i++) {
+    sum += digits[i] * weights2[i];
+  }
+  sum += digit1 * weights2[12];
+  let digit2 = sum % 11;
+  digit2 = digit2 < 2 ? 0 : 11 - digit2;
 
   return [...digits, digit1, digit2].join("");
 }
@@ -241,6 +276,9 @@ function handleMessage(message) {
   switch (message.action) {
     case ACTIONS.INSERT_CPF:
       value = generateCPF();
+      break;
+    case ACTIONS.INSERT_CNPJ:
+      value = generateCNPJ();
       break;
     case ACTIONS.INSERT_EMAIL:
       value = generateEmail();
