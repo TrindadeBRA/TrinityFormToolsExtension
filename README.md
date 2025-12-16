@@ -2,32 +2,26 @@
 
 Extensão compatível com **Firefox e Chrome** que adiciona opções no menu de contexto (botão direito) para inserir dados de teste em campos de formulário durante o desenvolvimento.
 
+## 🎉 Disponível nas Lojas Oficiais!
+
+A extensão foi aprovada e está disponível nas lojas oficiais! 🚀
+
+### 📥 Baixar Agora
+
+👉 **[Chrome Web Store](https://chromewebstore.google.com/detail/trinityform/bhoeijmhignchgoclonfnooogiebijao)**  
+👉 **[Firefox Add-ons](https://addons.mozilla.org/pt-BR/firefox/addon/trinityform/)**
+
+**💙 Se puder, baixe e deixe uma avaliação para dar aquela força! 🙏**
+
+---
+
 ## 🌐 Compatibilidade
 
+- ✅ **Google Chrome** (via Chrome Web Store)
 - ✅ **Firefox** (via Firefox Add-ons)
-- ✅ **Google Chrome** (via Chrome Web Store ou modo desenvolvedor)
 - ✅ **Microsoft Edge** (baseado em Chromium)
 - ✅ **Opera** (baseado em Chromium)
 - ✅ **Brave** (baseado em Chromium)
-
-## 📦 Instalação
-
-### Firefox
-
-1. Abra o Firefox
-2. Acesse `about:debugging#/runtime/this-firefox` na barra de endereço
-3. Clique em **"Carregar Add-on Temporário"** (Load Temporary Add-on)
-4. Selecione o arquivo `manifest.json` dentro desta pasta
-
-### Chrome / Edge / Opera / Brave
-
-1. Abra o navegador
-2. Acesse `chrome://extensions/` (ou `edge://extensions/` no Edge)
-3. Ative o **"Modo do desenvolvedor"** (toggle no canto superior direito)
-4. Clique em **"Carregar sem compactação"** (Load unpacked)
-5. Selecione a pasta `TrinityFormTools`
-
-📖 **Guia detalhado:** Veja [CHROME_INSTALL.md](CHROME_INSTALL.md) para mais informações
 
 ## 🚀 Como usar
 
@@ -63,6 +57,32 @@ Extensão compatível com **Firefox e Chrome** que adiciona opções no menu de 
 - Exemplos: `Maria Silva`, `João Santos Oliveira`, `Ana Paula Ferreira`
 - Lista extensa de nomes e sobrenomes comuns no Brasil
 
+## 📦 Instalação
+
+### Instalação Oficial (Recomendado)
+
+A forma mais fácil é instalar diretamente das lojas oficiais:
+
+- **[Chrome Web Store](https://chromewebstore.google.com/detail/trinityform/bhoeijmhignchgoclonfnooogiebijao)**
+- **[Firefox Add-ons](https://addons.mozilla.org/pt-BR/firefox/addon/trinityform/)**
+
+### Instalação Manual (Desenvolvimento)
+
+#### Firefox
+
+1. Abra o Firefox
+2. Acesse `about:debugging#/runtime/this-firefox` na barra de endereço
+3. Clique em **"Carregar Add-on Temporário"** (Load Temporary Add-on)
+4. Selecione o arquivo `manifest.json` dentro desta pasta
+
+#### Chrome / Edge / Opera / Brave
+
+1. Abra o navegador
+2. Acesse `chrome://extensions/` (ou `edge://extensions/` no Edge)
+3. Ative o **"Modo do desenvolvedor"** (toggle no canto superior direito)
+4. Clique em **"Carregar sem compactação"** (Load unpacked)
+5. Selecione a pasta `TrinityFormTools`
+
 ## 🔧 Características técnicas
 
 - ✅ Funciona com campos `input` e `textarea`
@@ -77,14 +97,15 @@ Extensão compatível com **Firefox e Chrome** que adiciona opções no menu de 
 
 ```
 TrinityFormTools/
-├── manifest.json          # Configuração da extensão
-├── background.js          # Gerencia o menu de contexto
-├── content-script.js      # Gera e insere os valores nos campos
-├── icon48.png            # Ícone 48x48
-├── icon96.png            # Ícone 96x96
-├── README.md             # Documentação principal
-├── CHROME_INSTALL.md     # Guia de instalação no Chrome
-└── PUBLISHING.md         # Guia de publicação
+├── manifest.json              # Configuração da extensão (Chrome)
+├── manifest.firefox.json      # Configuração da extensão (Firefox)
+├── background.js              # Gerencia o menu de contexto
+├── content-script.js          # Gera e insere os valores nos campos
+├── build.js                   # Script de build para ambas as plataformas
+├── icon48.png                 # Ícone 48x48
+├── icon96.png                 # Ícone 96x96
+├── icon128.png                # Ícone 128x128
+└── README.md                  # Documentação principal
 ```
 
 ## 🛠️ Desenvolvimento
@@ -102,6 +123,23 @@ TrinityFormTools/
 - Separação clara de responsabilidades
 - Fácil manutenção e extensão
 
+### Build
+
+```bash
+# Build para Chrome
+npm run build:chrome
+
+# Build para Firefox
+npm run build:firefox
+
+# Build para ambas as plataformas
+npm run build
+```
+
 ## 📝 Licença
 
-Desenvolvido por Trinity Web
+Desenvolvido por **Trinity Web**
+
+---
+
+**⭐ Gostou da extensão? Deixe uma avaliação nas lojas oficiais! ⭐**
