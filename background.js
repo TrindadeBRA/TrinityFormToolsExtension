@@ -9,10 +9,20 @@ const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 
 // Context menu item IDs
 const MENU_IDS = {
+  GROUP_DADOS: "group-dados",
+  GROUP_DATA: "group-data",
+  GROUP_CIDADE: "group-cidade",
+  GROUP_NUMEROS: "group-numeros",
   CPF: "insert-cpf",
   EMAIL: "insert-email",
   PHONE: "insert-phone",
   NAME: "insert-name",
+  DATE: "insert-date",
+  DATETIME: "insert-datetime",
+  TIME: "insert-time",
+  DATE_PLUS18: "insert-date-plus18",
+  DATE_MINUS18: "insert-date-minus18",
+  URL: "insert-url",
   CITY: "insert-city",
   CITY_UF: "insert-city-uf",
   STATE: "insert-state",
@@ -22,15 +32,30 @@ const MENU_IDS = {
   GET_CITY_UF: "get-city-uf",
   CNH: "insert-cnh",
   PLATE: "insert-plate",
-  OLD_PLATE: "insert-old-plate"
+  OLD_PLATE: "insert-old-plate",
+  GENERATE_INT: "generate-int",
+  GENERATE_MONEY: "generate-money",
+  GENERATE_DECIMAL: "generate-decimal",
+  GENERATE_PERCENT: "generate-percent",
+  GENERATE_PERCENT_SIGN: "generate-percent-with-sign"
 };
 
 // Context menu item titles (Portuguese - visible to user)
 const MENU_TITLES = {
+  DADOS: "Dados",
+  DATA: "Data",
+  CIDADE: "Cidade",
+  NUMEROS: "Números",
   CPF: "Inserir CPF",
   EMAIL: "Inserir Email",
   PHONE: "Inserir Telefone",
   NAME: "Inserir Nome",
+  DATE: "Inserir Data",
+  DATETIME: "Inserir Data/Hora",
+  TIME: "Inserir Hora",
+  DATE_PLUS18: "Inserir Data (>=18 anos)",
+  DATE_MINUS18: "Inserir Data (<18 anos)",
+  URL: "Inserir URL",
   CITY: "Inserir Cidade",
   CITY_UF: "Inserir Cidade/UF",
   STATE: "Inserir Estado",
@@ -40,7 +65,12 @@ const MENU_TITLES = {
   GET_CITY_UF: "Selecionar Cidade/UF...",
   CNH: "Inserir CNH",
   PLATE: "Inserir Placa (Mercosul)",
-  OLD_PLATE: "Inserir Placa (Antiga)"
+  OLD_PLATE: "Inserir Placa (Antiga)",
+  GENERATE_INT: "Gerar Inteiro",
+  GENERATE_MONEY: "Gerar Valor (Money)",
+  GENERATE_DECIMAL: "Gerar Decimal",
+  GENERATE_PERCENT: "Gerar Percentual",
+  GENERATE_PERCENT_SIGN: "Gerar Percentual (com sinal)"
 };
 
 // Message actions
@@ -49,6 +79,12 @@ const ACTIONS = {
   INSERT_EMAIL: "insertEmail",
   INSERT_PHONE: "insertPhone",
   INSERT_NAME: "insertName",
+  INSERT_DATE: "insertDate",
+  INSERT_DATETIME: "insertDateTime",
+  INSERT_TIME: "insertTime",
+  INSERT_DATE_PLUS18: "insertDatePlus18",
+  INSERT_DATE_MINUS18: "insertDateMinus18",
+  INSERT_URL: "insertUrl",
   INSERT_CITY: "insertCity",
   INSERT_CITY_UF: "insertCityUf",
   INSERT_STATE: "insertState",
@@ -58,103 +94,81 @@ const ACTIONS = {
   GET_CITY_UF: "getCityUf",
   INSERT_CNH: "insertCnh",
   INSERT_PLATE: "insertPlate",
-  INSERT_OLD_PLATE: "insertOldPlate"
+  INSERT_OLD_PLATE: "insertOldPlate",
+  GENERATE_INT: "generateInt",
+  GENERATE_MONEY: "generateMoney",
+  GENERATE_DECIMAL: "generateDecimal",
+  GENERATE_PERCENT: "generatePercent",
+  GENERATE_PERCENT_SIGN: "generatePercentWithSign",
+  FILL_FORM: "fillForm"
 };
 
 /**
- * Initialize context menu items
+ * Initialize context menu items (grouped)
  */
 function initializeContextMenus() {
-  // Create CPF menu item
-  browserAPI.contextMenus.create({
-    id: MENU_IDS.CPF,
-    title: MENU_TITLES.CPF,
-    contexts: ["editable"]
-  });
+  // Clear existing menus to avoid duplicates when service worker restarts
+  if (browserAPI.contextMenus.removeAll) {
+    browserAPI.contextMenus.removeAll();
+  }
 
-  // Create Email menu item
+  // Create parent groups - Note: Documentos merged into Dados
   browserAPI.contextMenus.create({
-    id: MENU_IDS.EMAIL,
-    title: MENU_TITLES.EMAIL,
-    contexts: ["editable"]
-  });
-
-  // Create Phone menu item
-  browserAPI.contextMenus.create({
-    id: MENU_IDS.PHONE,
-    title: MENU_TITLES.PHONE,
-    contexts: ["editable"]
-  });
-
-  // Create Name menu item
-  browserAPI.contextMenus.create({
-    id: MENU_IDS.NAME,
-    title: MENU_TITLES.NAME,
-    contexts: ["editable"]
-  });
-
-  // New items: City / City+UF / State / UF / CEP
-  browserAPI.contextMenus.create({
-    id: MENU_IDS.CITY,
-    title: MENU_TITLES.CITY,
+    id: MENU_IDS.GROUP_DADOS,
+    title: MENU_TITLES.DADOS,
     contexts: ["editable"]
   });
 
   browserAPI.contextMenus.create({
-    id: MENU_IDS.CITY_UF,
-    title: MENU_TITLES.CITY_UF,
-    contexts: ["editable"]
-  });
-
-  // Items to prompt user for a specific city
-  browserAPI.contextMenus.create({
-    id: MENU_IDS.GET_CITY,
-    title: MENU_TITLES.GET_CITY,
+    id: MENU_IDS.GROUP_DATA,
+    title: MENU_TITLES.DATA,
     contexts: ["editable"]
   });
 
   browserAPI.contextMenus.create({
-    id: MENU_IDS.GET_CITY_UF,
-    title: MENU_TITLES.GET_CITY_UF,
+    id: MENU_IDS.GROUP_CIDADE,
+    title: MENU_TITLES.CIDADE,
     contexts: ["editable"]
   });
 
   browserAPI.contextMenus.create({
-    id: MENU_IDS.STATE,
-    title: MENU_TITLES.STATE,
+    id: MENU_IDS.GROUP_NUMEROS,
+    title: MENU_TITLES.NUMEROS,
     contexts: ["editable"]
   });
 
-  browserAPI.contextMenus.create({
-    id: MENU_IDS.UF,
-    title: MENU_TITLES.UF,
-    contexts: ["editable"]
-  });
+  // Dados -> CPF, Email, Phone, Name, URL, CNH, Placas
+  browserAPI.contextMenus.create({ id: MENU_IDS.CPF, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.CPF, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.EMAIL, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.EMAIL, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.PHONE, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.PHONE, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.NAME, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.NAME, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.URL, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.URL, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.CNH, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.CNH, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.PLATE, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.PLATE, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.OLD_PLATE, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.OLD_PLATE, contexts: ["editable"] });
 
-  browserAPI.contextMenus.create({
-    id: MENU_IDS.CEP,
-    title: MENU_TITLES.CEP,
-    contexts: ["editable"]
-  });
+  // Data -> date/time items
+  browserAPI.contextMenus.create({ id: MENU_IDS.DATE, parentId: MENU_IDS.GROUP_DATA, title: MENU_TITLES.DATE, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.DATETIME, parentId: MENU_IDS.GROUP_DATA, title: MENU_TITLES.DATETIME, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.TIME, parentId: MENU_IDS.GROUP_DATA, title: MENU_TITLES.TIME, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.DATE_PLUS18, parentId: MENU_IDS.GROUP_DATA, title: MENU_TITLES.DATE_PLUS18, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.DATE_MINUS18, parentId: MENU_IDS.GROUP_DATA, title: MENU_TITLES.DATE_MINUS18, contexts: ["editable"] });
 
-  // Vehicle / document quick-insert items
-  browserAPI.contextMenus.create({
-    id: MENU_IDS.CNH,
-    title: MENU_TITLES.CNH,
-    contexts: ["editable"]
-  });
+  // Cidade -> city/state related
+  browserAPI.contextMenus.create({ id: MENU_IDS.CITY, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.CITY, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.CITY_UF, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.CITY_UF, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.GET_CITY, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.GET_CITY, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.GET_CITY_UF, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.GET_CITY_UF, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.STATE, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.STATE, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.UF, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.UF, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.CEP, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.CEP, contexts: ["editable"] });
 
-  browserAPI.contextMenus.create({
-    id: MENU_IDS.PLATE,
-    title: MENU_TITLES.PLATE,
-    contexts: ["editable"]
-  });
-
-  browserAPI.contextMenus.create({
-    id: MENU_IDS.OLD_PLATE,
-    title: MENU_TITLES.OLD_PLATE,
-    contexts: ["editable"]
-  });
+  // Números -> numeric generators
+  browserAPI.contextMenus.create({ id: MENU_IDS.GENERATE_INT, parentId: MENU_IDS.GROUP_NUMEROS, title: MENU_TITLES.GENERATE_INT, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.GENERATE_MONEY, parentId: MENU_IDS.GROUP_NUMEROS, title: MENU_TITLES.GENERATE_MONEY, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.GENERATE_DECIMAL, parentId: MENU_IDS.GROUP_NUMEROS, title: MENU_TITLES.GENERATE_DECIMAL, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.GENERATE_PERCENT, parentId: MENU_IDS.GROUP_NUMEROS, title: MENU_TITLES.GENERATE_PERCENT, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.GENERATE_PERCENT_SIGN, parentId: MENU_IDS.GROUP_NUMEROS, title: MENU_TITLES.GENERATE_PERCENT_SIGN, contexts: ["editable"] });
 }
 
 /**
@@ -206,6 +220,39 @@ function handleContextMenuClick(info, tab) {
     case MENU_IDS.OLD_PLATE:
       action = ACTIONS.INSERT_OLD_PLATE;
       break;
+    case MENU_IDS.GENERATE_INT:
+      action = ACTIONS.GENERATE_INT;
+      break;
+    case MENU_IDS.GENERATE_MONEY:
+      action = ACTIONS.GENERATE_MONEY;
+      break;
+    case MENU_IDS.GENERATE_DECIMAL:
+      action = ACTIONS.GENERATE_DECIMAL;
+      break;
+    case MENU_IDS.GENERATE_PERCENT:
+      action = ACTIONS.GENERATE_PERCENT;
+      break;
+    case MENU_IDS.GENERATE_PERCENT_SIGN:
+      action = ACTIONS.GENERATE_PERCENT_SIGN;
+      break;
+    case MENU_IDS.DATE:
+      action = ACTIONS.INSERT_DATE;
+      break;
+    case MENU_IDS.DATETIME:
+      action = ACTIONS.INSERT_DATETIME;
+      break;
+    case MENU_IDS.TIME:
+      action = ACTIONS.INSERT_TIME;
+      break;
+    case MENU_IDS.URL:
+      action = ACTIONS.INSERT_URL;
+      break;
+    case MENU_IDS.DATE_PLUS18:
+      action = ACTIONS.INSERT_DATE_PLUS18;
+      break;
+    case MENU_IDS.DATE_MINUS18:
+      action = ACTIONS.INSERT_DATE_MINUS18;
+      break;
     default:
       return;
   }
@@ -234,3 +281,12 @@ if (typeof browserAPI.action !== 'undefined') {
 
 // Listen for context menu clicks
 browserAPI.contextMenus.onClicked.addListener(handleContextMenuClick);
+
+// Listen for extension button (action) clicks and request a form fill
+if (browserAPI.action && browserAPI.action.onClicked) {
+  browserAPI.action.onClicked.addListener((tab) => {
+    if (tab && tab.id) {
+      browserAPI.tabs.sendMessage(tab.id, { action: ACTIONS.FILL_FORM });
+    }
+  });
+}
