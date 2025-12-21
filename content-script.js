@@ -758,9 +758,20 @@ function fillCurrentForm() {
         }
         else if (token.includes('url') || token.includes('site') || token.includes('website') || token.includes('link') || type === 'url') {
           value = generateUrl();
+        } else if (token.includes('number') || token.includes('numero') || token.includes('número') || type === 'number' || type === 'int' || type === 'integer') {
+          // pegar min e max do campo se houver
+          let min = 0;
+          let max = 10000;
+          if (el.min && !isNaN(Number(el.min))) {
+            min = Number(el.min);
+          }
+          if (el.max && !isNaN(Number(el.max))) {
+            max = Number(el.max);
+          }
+          value = generateInt(min, max);
         }
-        else if (type === 'number') {
-          value = String(Math.floor(Math.random() * 1000));
+        else if (token.includes('money') || token.includes('dinheiro') || token.includes('valor') || token.includes('preço') || token.includes('preco')) {
+          value = generateMoney();
         }
 
         // campos ou textarea com required vazios - preencher com texto genérico, respeitando minlength e maxlength
