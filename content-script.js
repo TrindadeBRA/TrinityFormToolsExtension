@@ -737,7 +737,7 @@ function fillCurrentForm() {
         else if (token.includes('email')) value = generateEmail();
         else if (token.includes('tel') || token.includes('telefone') || token.includes('phone') || token.includes('celular') || token.includes('cel') || type === 'tel') value = generatePhone();
         else if (token.includes('usuario') || token.includes('username') || token.includes('user') || token.includes('login')) value = generateUsername();
-        else if (token.includes('nome') || token.includes('name')) value = generateName();
+        else if (token.includes('nome') || token.includes('name') || token.includes('fullname') || token.includes('full name') || token.includes('bairro') || token.includes('neighborhood') || token.includes('address') || token.includes('endereco')) value = generateName();
         else if ((token.includes('cidade') && token.includes('uf')) || token.includes('cityuf')) value = generateCityUf();
         else if (token.includes('cidade') || token.includes('city')) value = generateCity();
         //se for state ou estado mas tiver maxleng =2, gerar UF
@@ -758,8 +758,8 @@ function fillCurrentForm() {
         }
         else if (token.includes('url') || token.includes('site') || token.includes('website') || token.includes('link') || type === 'url') {
           value = generateUrl();
-        } else if (token.includes('number') || token.includes('numero') || token.includes('número') || type === 'number' || type === 'int' || type === 'integer') {
-          // pegar min e max do campo se houver
+        } else if (token.includes('quantidade') || token.includes('number') || token.includes('numero') || token.includes('número') || type === 'number' || type === 'int' || type === 'integer') {
+
           let min = 0;
           let max = 10000;
           if (el.min && !isNaN(Number(el.min))) {
@@ -772,6 +772,17 @@ function fillCurrentForm() {
         }
         else if (token.includes('money') || token.includes('dinheiro') || token.includes('valor') || token.includes('preço') || token.includes('preco')) {
           value = generateMoney();
+        } else if (token.includes('decimal') || token.includes('volume') || token.includes('float') || token.includes('real') || token.includes('double') || type === 'decimal' || type === 'float' || type === 'real' || type === 'double'
+          || token.includes('peso') || token.includes('weight') || token.includes('cubagem') || token.includes('cubicagem') || token.includes('cubic weight') || token.includes('largura') || token.includes('width') || token.includes('altura') || token.includes('height') || token.includes('profundidade') || token.includes('depth') || token.includes('comprimento') || token.includes('length')) {
+          let min = 0;
+          let max = 10000;
+          if (el.min && !isNaN(Number(el.min))) {
+            min = Number(el.min);
+          }
+          if (el.max && !isNaN(Number(el.max))) {
+            max = Number(el.max);
+          }
+          value = generateDecimal(min, max, 2);
         }
 
         // campos ou textarea com required vazios - preencher com texto genérico, respeitando minlength e maxlength
