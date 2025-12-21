@@ -273,7 +273,7 @@ npm run build
 
 ## 📝 Licença
 
-Desenvolvido por **Trinity Web**
+Desenvolvido por **Trinity Web** e **Kaizonaro**
 
 ## 📚 Documentação Adicional
 
