@@ -27,35 +27,170 @@ A extensão foi aprovada e está disponível nas lojas oficiais! 🚀
 
 1. Vá para qualquer página com formulário
 2. Clique com o botão direito em um campo de texto editável
-3. Selecione uma das opções disponíveis:
-   - **Inserir CPF válido** - Gera um CPF válido sem pontuação
-   - **Inserir Email** - Gera um email aleatório
-   - **Inserir Telefone com DDD** - Gera um telefone no formato (XX) XXXXX-XXXX
-   - **Inserir Nome** - Gera um nome brasileiro aleatório
+3. Selecione uma das opções disponíveis no menu de contexto
 4. O valor será gerado e inserido automaticamente no campo
+
+**💡 Dica:** Você também pode clicar no ícone da extensão na barra de ferramentas para preencher automaticamente todo o formulário com dados de teste!
 
 ## ✨ Funcionalidades
 
-### CPF válido
+### 📋 Dados Pessoais e Documentos
+
+#### CPF válido
 - Gera CPFs válidos com dígitos verificadores corretos
 - Formato: apenas números, sem pontuação (ex: `12345678901`)
 - Algoritmo de validação completo
 
-### Email
+#### CNPJ válido
+- Gera CNPJs válidos com dígitos verificadores corretos
+- Formato: apenas números, sem pontuação (ex: `12345678000190`)
+- Algoritmo de validação completo
+
+#### CNH (Carteira Nacional de Habilitação)
+- Gera números de CNH válidos
+- Formato: 11 dígitos com dígitos verificadores
+
+#### Email
 - Gera emails aleatórios com formatos realistas
 - Exemplos: `usuario1234@gmail.com`, `teste5678@hotmail.com`
 - Múltiplos domínios e prefixos
 
-### Telefone com DDD
+#### Telefone com DDD
 - Gera telefones com DDD válidos do Brasil
 - Formato: `(XX) XXXXX-XXXX`
-- DDDs incluídos: 11, 21, 31, 41, 47, 48, 51, 61, 71, 81, 85
+- DDDs baseados em dados reais de cidades brasileiras
 
-### Nome
+#### Nome
 - Gera nomes brasileiros aleatórios realistas
 - Formato: Primeiro Nome + Sobrenome (às vezes com segundo sobrenome)
 - Exemplos: `Maria Silva`, `João Santos Oliveira`, `Ana Paula Ferreira`
 - Lista extensa de nomes e sobrenomes comuns no Brasil
+- Suporta token 'empresa' para gerar nomes de empresas
+
+#### Username
+- Gera usernames aleatórios
+- Formato: prefixo + número (ex: `usuario1234`, `teste5678`)
+
+#### URL
+- Gera URLs realistas de sites conhecidos
+- Suporta diferentes protocolos (HTTP/HTTPS)
+- Inclui caminhos e parâmetros de query quando apropriado
+
+#### Placas de Veículos
+- **Placa Mercosul**: Formato `ABC1D23` (ex: `ABC1D23`)
+- **Placa Antiga**: Formato `AAA-1234` (ex: `ABC-1234`)
+
+### 📅 Data e Hora
+
+#### Data
+- Gera datas aleatórias no formato brasileiro `DD/MM/YYYY`
+- Respeita o tipo `date` do HTML5 quando aplicável
+- Suporta datas entre 1950 e hoje
+
+#### Data/Hora
+- Gera data e hora combinadas no formato `DD/MM/YYYY HH:MM`
+- Respeita o tipo `datetime-local` do HTML5 quando aplicável
+
+#### Hora
+- Gera horas aleatórias no formato `HH:MM`
+- Respeita o tipo `time` do HTML5 quando aplicável
+
+#### Data (>=18 anos)
+- Gera datas de nascimento para pessoas com 18 anos ou mais
+- Útil para formulários que requerem maioridade
+
+#### Data (<18 anos)
+- Gera datas de nascimento para pessoas menores de 18 anos
+- Útil para testes de formulários com restrições de idade
+
+### 🏙️ Cidades e Localização
+
+#### Cidade
+- Gera nomes de cidades brasileiras aleatórias
+- Baseado em dados reais do IBGE
+
+#### Cidade/UF
+- Gera cidade e estado no formato `Cidade - UF`
+- Exemplo: `São Paulo - SP`
+
+#### Selecionar Cidade
+- Abre um prompt para buscar cidade por nome, código IBGE ou CEP
+- Retorna o nome da cidade encontrada
+
+#### Selecionar Cidade/UF
+- Abre um prompt para buscar cidade por nome, código IBGE ou CEP
+- Retorna no formato `Cidade - UF`
+
+#### Estado
+- Gera nomes completos de estados brasileiros
+- Exemplo: `São Paulo`, `Rio de Janeiro`
+
+#### UF
+- Gera siglas de estados brasileiros
+- Formato: 2 letras (ex: `SP`, `RJ`)
+- Detecta automaticamente campos com `maxLength=2`
+
+#### CEP
+- Gera CEPs válidos baseados em faixas reais de cidades
+- Formato: `XXXXX-XXX`
+
+#### IBGE (Cidade)
+- **Inserir IBGE**: Gera código IBGE de cidade aleatório
+- **Selecionar IBGE**: Abre prompt para buscar e retornar código IBGE de cidade
+
+#### IBGE (Estado)
+- **Inserir IBGE Estado**: Gera código IBGE de estado aleatório
+- **Selecionar IBGE Estado**: Abre prompt para buscar e retornar código IBGE de estado
+
+#### DDD
+- **Inserir DDD**: Gera DDD aleatório baseado em cidades brasileiras
+- **Selecionar DDD**: Abre prompt para buscar DDD por cidade ou inserir diretamente
+
+### 🔢 Números e Valores
+
+#### Inteiro
+- Gera números inteiros aleatórios
+- Respeita atributos `min` e `max` do campo quando presentes
+- Formato padrão: 0 a 10000
+
+#### Valor (Money)
+- Gera valores monetários no formato brasileiro
+- Formato: `1.234,56` (milhar com ponto, decimal com vírgula)
+- Faixa padrão: R$ 0,00 a R$ 100.000,00
+
+#### Decimal
+- Gera números decimais no formato brasileiro
+- Formato: `1.234,5678` (milhar com ponto, decimal com vírgula)
+- Respeita atributos `min`, `max` e casas decimais
+- Útil para campos de peso, altura, volume, etc.
+
+#### Percentual
+- Gera percentuais no formato `XX,XX%`
+- Faixa: 0% a 100%
+
+#### Percentual (com sinal)
+- Gera percentuais com sinal positivo ou negativo
+- Formato: `+XX,XX%` ou `-XX,XX%`
+- Faixa: -100% a +100%
+
+### 📝 Texto
+
+#### Lorem Ipsum
+- Gera texto Lorem Ipsum aleatório
+- Permite especificar quantidade de palavras
+- Respeita `minLength` e `maxLength` do campo
+- Útil para preencher campos de texto longo
+
+### 🤖 Preenchimento Automático
+
+#### Preencher Formulário
+- Clique no ícone da extensão na barra de ferramentas
+- Preenche automaticamente todos os campos vazios do formulário
+- Detecta automaticamente o tipo de campo pelo `name`, `id` ou `type`
+- Suporta tokens como: `cpf`, `cnpj`, `email`, `telefone`, `nome`, `cidade`, `estado`, `cep`, `ibge`, `ddd`, `data`, `hora`, `url`, `username`, `cnh`, `placa`, `money`, `decimal`, `percent`, etc.
+- Preenche campos de texto vazios com Lorem Ipsum quando não há correspondência
+- Respeita `minLength` e `maxLength` dos campos
+- Compatível com frameworks JavaScript (React, Vue, Angular, etc.)
 
 ## 📦 Instalação
 
@@ -139,6 +274,11 @@ npm run build
 ## 📝 Licença
 
 Desenvolvido por **Trinity Web**
+
+## 📚 Documentação Adicional
+
+- **[CHANGELOG.md](CHANGELOG.md)** - Histórico de mudanças e versões
+- **[PRIVACY_ANSWERS.md](PRIVACY_ANSWERS.md)** - Respostas sobre privacidade e uso de dados
 
 ---
 
