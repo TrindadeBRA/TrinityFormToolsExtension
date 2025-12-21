@@ -25,8 +25,17 @@ const ACTIONS = {
   GET_CITY: "getCity",
   GET_CITY_UF: "getCityUf",
   INSERT_CNH: "insertCnh",
+  INSERT_CNPJ: "insertCnpj",
+  INSERT_IBGE: "insertIbge",
+  SELECT_IBGE: "selectIbge",
+  INSERT_IBGE_STATE: "insertIbgeState",
+  SELECT_IBGE_STATE: "selectIbgeState",
+  INSERT_DDD: "insertDdd",
+  SELECT_DDD: "selectDdd",
   INSERT_PLATE: "insertPlate",
   INSERT_OLD_PLATE: "insertOldPlate",
+  GENERATE_USERNAME: "generateUsername",
+  GENERATE_LOREM: "generateLorem",
   GENERATE_INT: "generateInt",
   GENERATE_MONEY: "generateMoney",
   GENERATE_DECIMAL: "generateDecimal",
@@ -133,19 +142,50 @@ function generateCPF() {
 }
 
 /**
+ * Generates a valid CNPJ (14 digits) without formatting
+ * @returns {string} 14-digit CNPJ
+ */
+function generateCNPJ() {
+  // Generate 12 random digits
+  const digits = Array.from({ length: 12 }, () => Math.floor(Math.random() * 10));
+
+  const calcDigit = (nums, weights) => {
+    let sum = 0;
+    for (let i = 0; i < nums.length; i++) {
+      sum += nums[i] * weights[i];
+    }
+    const mod = sum % 11;
+    return (mod < 2) ? 0 : (11 - mod);
+  };
+
+  const weights1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+  const digit1 = calcDigit(digits, weights1);
+  digits.push(digit1);
+
+  const weights2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+  const digit2 = calcDigit(digits, weights2);
+  digits.push(digit2);
+
+  return digits.join('');
+}
+
+/**
  * Generates a random email address
  * @returns {string} Email address
  */
 function generateEmail() {
-  const username = EMAIL_USERNAMES[
-    Math.floor(Math.random() * EMAIL_USERNAMES.length)
-  ];
-  const number = Math.floor(Math.random() * 10000);
   const domain = EMAIL_DOMAINS[
     Math.floor(Math.random() * EMAIL_DOMAINS.length)
   ];
+  return `${generateUsername()}@${domain}`;
+}
 
-  return `${username}${number}@${domain}`;
+function generateUsername() {
+  let username = EMAIL_USERNAMES[
+    Math.floor(Math.random() * EMAIL_USERNAMES.length)
+  ];
+  const number = Math.floor(Math.random() * 10000);
+  return `${username}${number}`;
 }
 
 /**
@@ -294,6 +334,107 @@ function getCityUf() {
     return '';
   } catch (error) {
     console.debug('Erro em getCityUf:', error.message);
+    return '';
+  }
+}
+
+/**
+ * Seleciona um IBGE de cidade via prompt e retorna o código (string)
+ */
+function selectIbge() {
+  try {
+    const input = window.prompt('Digite nome, IBGE ou CEP da cidade:');
+    if (input === null) return '';
+    const city = pegarCidade(input);
+    if (city && city.ibge) return String(city.ibge);
+    window.alert('Cidade não encontrada.');
+    return '';
+  } catch (error) {
+    console.debug('Erro em selectIbge:', error.message);
+    return '';
+  }
+}
+
+/**
+ * Retorna um IBGE de cidade aleatório (string)
+ */
+function insertIbge() {
+  try {
+    const city = getRandomCityObject();
+    if (city && city.ibge) return String(city.ibge);
+    // fallback: 7-digit number
+    const fallback = Math.floor(1000000 + Math.random() * 9000000);
+    return String(fallback);
+  } catch (error) {
+    console.debug('Erro em insertIbge:', error.message);
+    return '';
+  }
+}
+
+/**
+ * Seleciona IBGE de estado via prompt e retorna o código do estado (string)
+ */
+function selectIbgeState() {
+  try {
+    const input = window.prompt('Digite nome ou IBGE do estado:');
+    if (input === null) return '';
+    const state = window.brasil && window.brasil.pegarEstado ? window.brasil.pegarEstado(input) : null;
+    if (state && state.ibge) return String(state.ibge);
+    window.alert('Estado não encontrado.');
+    return '';
+  } catch (error) {
+    console.debug('Erro em selectIbgeState:', error.message);
+    return '';
+  }
+}
+
+/**
+ * Retorna um IBGE de estado aleatório (string)
+ */
+function insertIbgeState() {
+  try {
+    const estados = window.brasil && Array.isArray(window.brasil.estados) ? window.brasil.estados : [];
+    if (estados.length) {
+      const s = estados[Math.floor(Math.random() * estados.length)];
+      return String(s.ibge);
+    }
+    // fallback 2-digit state code
+    const fallback = String(Math.floor(10 + Math.random() * 89));
+    return fallback;
+  } catch (error) {
+    console.debug('Erro em insertIbgeState:', error.message);
+    return '';
+  }
+}
+
+/**
+ * Seleciona um DDD via prompt (pode digitar DDD ou cidade) e retorna string do DDD
+ */
+function selectDdd() {
+  try {
+    const input = window.prompt('Digite DDD (ex: 11) ou nome/IBGE/CEP da cidade:');
+    if (input === null) return '';
+    const val = String(input).trim();
+    if (/^\d{2}$/.test(val)) return val;
+    const city = pegarCidade(val);
+    if (city && city.ddd) return String(city.ddd).padStart(2, '0');
+    window.alert('DDD não encontrado.');
+    return '';
+  } catch (error) {
+    console.debug('Erro em selectDdd:', error.message);
+    return '';
+  }
+}
+
+/**
+ * Retorna um DDD aleatório (string)
+ */
+function insertDdd() {
+  try {
+    const ddd = AREA_CODES && AREA_CODES.length ? AREA_CODES[Math.floor(Math.random() * AREA_CODES.length)] : '11';
+    return String(ddd);
+  } catch (error) {
+    console.debug('Erro em insertDdd:', error.message);
     return '';
   }
 }
@@ -496,6 +637,44 @@ function generateDateUnder18() {
   return `${dd}/${mm}/${yyyy}`;
 }
 
+
+function loremIpsum(wordsCount = 20, minLength = 0, maxLength = 200) {
+  const words = [
+    "lorem", "ipsum", "dolor", "sit", "amet", "consectetur",
+    "adipiscing", "elit", "sed", "do", "eiusmod", "tempor",
+    "incididunt", "ut", "labore", "et", "dolore", "magna",
+    "aliqua", "ut", "enim", "ad", "minim", "veniam", "quis",
+    "nostrud", "exercitation", "ullamco", "laboris", "nisi",
+    "ut", "aliquip", "ex", "ea", "commodo", "consequat"
+  ];
+
+  if (!Number.isFinite(wordsCount) || wordsCount <= 0) wordsCount = 20;
+  if (!Number.isFinite(minLength) || minLength < 0) minLength = 0;
+  if (!Number.isFinite(maxLength) || maxLength <= 0) maxLength = 200;
+
+  // Build initial text using requested number of words
+  const parts = [];
+  for (let i = 0; i < wordsCount; i++) {
+    parts.push(words[Math.floor(Math.random() * words.length)]);
+  }
+  let text = parts.join(' ');
+
+  // Ensure minimum length by appending random words
+  while (text.length < minLength) {
+    text += ' ' + words[Math.floor(Math.random() * words.length)];
+  }
+
+  // Trim to maxLength without leaving trailing partial words when possible
+  if (text.length > maxLength) {
+    let truncated = text.substring(0, maxLength);
+    const lastSpace = truncated.lastIndexOf(' ');
+    if (lastSpace > 0) truncated = truncated.substring(0, lastSpace);
+    text = truncated;
+  }
+
+  return text.trim();
+}
+
 /**
  * Fill the current form: prefer focused element's form, else first <form> on page
  * Uses element name, id or type to pick an appropriate generator
@@ -551,11 +730,18 @@ function fillCurrentForm() {
         let value = null;
 
         if (token.includes('cpf')) value = generateCPF();
+        else if (token.includes('cnpj')) value = generateCNPJ();
+        else if ((token.includes('ibge') && (token.includes('estado') || token.includes('state') || token.includes('ibgeestado') || token.includes('ibge_estado')))) value = insertIbgeState();
+        else if (token.includes('ibge')) value = insertIbge();
+        else if (token.includes('ddd')) value = insertDdd();
         else if (token.includes('email')) value = generateEmail();
-        else if (token.includes('tel') || token.includes('telefone') || type === 'tel') value = generatePhone();
+        else if (token.includes('tel') || token.includes('telefone') || token.includes('phone') || token.includes('celular') || token.includes('cel') || type === 'tel') value = generatePhone();
+        else if (token.includes('usuario') || token.includes('username') || token.includes('user') || token.includes('login')) value = generateUsername();
         else if (token.includes('nome') || token.includes('name')) value = generateName();
         else if ((token.includes('cidade') && token.includes('uf')) || token.includes('cityuf')) value = generateCityUf();
         else if (token.includes('cidade') || token.includes('city')) value = generateCity();
+        //se for state ou estado mas tiver maxleng =2, gerar UF
+        else if ((token.includes('estado') || token.includes('state')) && el.maxLength === 2) value = generateUf();
         else if (token.includes('estado') || token.includes('state')) value = generateState();
         else if (token === 'uf' || token.includes('_uf') || token.includes(' uf')) value = generateUf();
         else if (token.includes('cep')) value = generateCep();
@@ -578,7 +764,7 @@ function fillCurrentForm() {
         }
 
         // campos ou textarea com required vazios - preencher com texto genérico, respeitando minlength e maxlength
-        if ((tag === 'input' && (type === 'text' || type === 'search' || type === 'password' || type === 'url' || type === 'email')) ||
+        if ((tag === 'input' && (type === 'text' || type === 'search' || type === 'password')) ||
           tag === 'textarea') {
           if (!el.value || el.value.trim() === '') {
             if (value === null) {
@@ -586,15 +772,22 @@ function fillCurrentForm() {
               if (el.minLength && el.minLength > 0) {
                 minLength = el.minLength;
               }
-              value = 'Teste '.padEnd(minLength, 'X');
+
+              //gerar lorem ipsum simples
+              value = loremIpsum(20, minLength, el.maxLength > 0 ? el.maxLength : 200);
               if (el.maxLength && el.maxLength > 0) {
                 value = value.slice(0, el.maxLength);
               }
-
+              value = value.trim();
             }
           }
         }
 
+
+        // Respect maxlength for generated values (avoid overflowing inputs)
+        if (value !== null && typeof value === 'string' && el.maxLength && el.maxLength > 0) {
+          value = value.slice(0, el.maxLength);
+        }
 
         if (value !== null) {
           if (tag === 'select') {
@@ -655,6 +848,13 @@ try {
     getCity,
     getCityUf,
     generateCNH,
+    generateCNPJ,
+    selectIbge,
+    insertIbge,
+    selectIbgeState,
+    insertIbgeState,
+    selectDdd,
+    insertDdd,
     generatePlate,
     generateOldPlate,
     generateDate,
@@ -666,6 +866,8 @@ try {
     generateDecimal,
     generatePercent,
     generatePercentWithSign,
+    generateUsername,
+    loremIpsum,
     fillCurrentForm
 
   });
@@ -817,6 +1019,27 @@ function handleMessage(message) {
     case ACTIONS.INSERT_CNH:
       value = generateCNH();
       break;
+    case ACTIONS.INSERT_CNPJ:
+      value = generateCNPJ();
+      break;
+    case ACTIONS.INSERT_IBGE:
+      value = insertIbge();
+      break;
+    case ACTIONS.SELECT_IBGE:
+      value = selectIbge();
+      break;
+    case ACTIONS.INSERT_IBGE_STATE:
+      value = insertIbgeState();
+      break;
+    case ACTIONS.SELECT_IBGE_STATE:
+      value = selectIbgeState();
+      break;
+    case ACTIONS.INSERT_DDD:
+      value = insertDdd();
+      break;
+    case ACTIONS.SELECT_DDD:
+      value = selectDdd();
+      break;
     case ACTIONS.INSERT_PLATE:
       value = generatePlate();
       break;
@@ -837,6 +1060,25 @@ function handleMessage(message) {
       break;
     case ACTIONS.GENERATE_PERCENT_SIGN:
       value = generatePercentWithSign();
+      break;
+    case ACTIONS.GENERATE_USERNAME:
+      value = generateUsername();
+      break;
+    case ACTIONS.GENERATE_LOREM:
+      {
+        const wordsInput = window.prompt('Quantas palavras para o Lorem Ipsum? (padrão 20)');
+        if (wordsInput === null) return;
+        let count = parseInt(wordsInput, 10);
+        if (!Number.isFinite(count) || count <= 0) count = 20;
+        const el = activeElement;
+        let min = 0;
+        let max = 200;
+        if (el) {
+          if (el.minLength && el.minLength > 0) min = el.minLength;
+          if (el.maxLength && el.maxLength > 0) max = el.maxLength;
+        }
+        value = loremIpsum(count, min, max);
+      }
       break;
     case ACTIONS.INSERT_STATE:
       value = generateState();

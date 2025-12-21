@@ -31,8 +31,11 @@ const MENU_IDS = {
   GET_CITY: "get-city",
   GET_CITY_UF: "get-city-uf",
   CNH: "insert-cnh",
+  CNPJ: "insert-cnpj",
   PLATE: "insert-plate",
   OLD_PLATE: "insert-old-plate",
+  GENERATE_USERNAME: "generate-username",
+  LOREM_IPSUM: "generate-lorem",
   GENERATE_INT: "generate-int",
   GENERATE_MONEY: "generate-money",
   GENERATE_DECIMAL: "generate-decimal",
@@ -63,9 +66,18 @@ const MENU_TITLES = {
   CEP: "Inserir CEP",
   GET_CITY: "Selecionar Cidade...",
   GET_CITY_UF: "Selecionar Cidade/UF...",
+  SELECT_IBGE: "Selecionar IBGE...",
+  INSERT_IBGE: "Inserir IBGE",
+  SELECT_IBGE_STATE: "Selecionar IBGE Estado...",
+  INSERT_IBGE_STATE: "Inserir IBGE Estado",
+  SELECT_DDD: "Selecionar DDD...",
+  INSERT_DDD: "Inserir DDD",
   CNH: "Inserir CNH",
+  CNPJ: "Inserir CNPJ",
   PLATE: "Inserir Placa (Mercosul)",
   OLD_PLATE: "Inserir Placa (Antiga)",
+  GENERATE_USERNAME: "Gerar Username",
+  LOREM_IPSUM: "Gerar Lorem Ipsum",
   GENERATE_INT: "Gerar Inteiro",
   GENERATE_MONEY: "Gerar Valor (Money)",
   GENERATE_DECIMAL: "Gerar Decimal",
@@ -93,8 +105,17 @@ const ACTIONS = {
   GET_CITY: "getCity",
   GET_CITY_UF: "getCityUf",
   INSERT_CNH: "insertCnh",
+  INSERT_CNPJ: "insertCnpj",
+  INSERT_IBGE: "insertIbge",
+  SELECT_IBGE: "selectIbge",
+  INSERT_IBGE_STATE: "insertIbgeState",
+  SELECT_IBGE_STATE: "selectIbgeState",
+  INSERT_DDD: "insertDdd",
+  SELECT_DDD: "selectDdd",
   INSERT_PLATE: "insertPlate",
   INSERT_OLD_PLATE: "insertOldPlate",
+  GENERATE_USERNAME: "generateUsername",
+  GENERATE_LOREM: "generateLorem",
   GENERATE_INT: "generateInt",
   GENERATE_MONEY: "generateMoney",
   GENERATE_DECIMAL: "generateDecimal",
@@ -144,8 +165,11 @@ function initializeContextMenus() {
   browserAPI.contextMenus.create({ id: MENU_IDS.NAME, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.NAME, contexts: ["editable"] });
   browserAPI.contextMenus.create({ id: MENU_IDS.URL, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.URL, contexts: ["editable"] });
   browserAPI.contextMenus.create({ id: MENU_IDS.CNH, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.CNH, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.CNPJ, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.CNPJ, contexts: ["editable"] });
   browserAPI.contextMenus.create({ id: MENU_IDS.PLATE, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.PLATE, contexts: ["editable"] });
   browserAPI.contextMenus.create({ id: MENU_IDS.OLD_PLATE, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.OLD_PLATE, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.GENERATE_USERNAME, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.GENERATE_USERNAME, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.LOREM_IPSUM, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.LOREM_IPSUM, contexts: ["editable"] });
 
   // Data -> date/time items
   browserAPI.contextMenus.create({ id: MENU_IDS.DATE, parentId: MENU_IDS.GROUP_DATA, title: MENU_TITLES.DATE, contexts: ["editable"] });
@@ -159,6 +183,12 @@ function initializeContextMenus() {
   browserAPI.contextMenus.create({ id: MENU_IDS.CITY_UF, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.CITY_UF, contexts: ["editable"] });
   browserAPI.contextMenus.create({ id: MENU_IDS.GET_CITY, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.GET_CITY, contexts: ["editable"] });
   browserAPI.contextMenus.create({ id: MENU_IDS.GET_CITY_UF, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.GET_CITY_UF, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.SELECT_IBGE, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.SELECT_IBGE, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.INSERT_IBGE, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.INSERT_IBGE, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.SELECT_IBGE_STATE, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.SELECT_IBGE_STATE, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.INSERT_IBGE_STATE, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.INSERT_IBGE_STATE, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.SELECT_DDD, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.SELECT_DDD, contexts: ["editable"] });
+  browserAPI.contextMenus.create({ id: MENU_IDS.INSERT_DDD, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.INSERT_DDD, contexts: ["editable"] });
   browserAPI.contextMenus.create({ id: MENU_IDS.STATE, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.STATE, contexts: ["editable"] });
   browserAPI.contextMenus.create({ id: MENU_IDS.UF, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.UF, contexts: ["editable"] });
   browserAPI.contextMenus.create({ id: MENU_IDS.CEP, parentId: MENU_IDS.GROUP_CIDADE, title: MENU_TITLES.CEP, contexts: ["editable"] });
@@ -202,6 +232,24 @@ function handleContextMenuClick(info, tab) {
     case MENU_IDS.GET_CITY_UF:
       action = ACTIONS.GET_CITY_UF;
       break;
+    case MENU_IDS.SELECT_IBGE:
+      action = ACTIONS.SELECT_IBGE;
+      break;
+    case MENU_IDS.INSERT_IBGE:
+      action = ACTIONS.INSERT_IBGE;
+      break;
+    case MENU_IDS.SELECT_IBGE_STATE:
+      action = ACTIONS.SELECT_IBGE_STATE;
+      break;
+    case MENU_IDS.INSERT_IBGE_STATE:
+      action = ACTIONS.INSERT_IBGE_STATE;
+      break;
+    case MENU_IDS.SELECT_DDD:
+      action = ACTIONS.SELECT_DDD;
+      break;
+    case MENU_IDS.INSERT_DDD:
+      action = ACTIONS.INSERT_DDD;
+      break;
     case MENU_IDS.STATE:
       action = ACTIONS.INSERT_STATE;
       break;
@@ -214,11 +262,20 @@ function handleContextMenuClick(info, tab) {
     case MENU_IDS.CNH:
       action = ACTIONS.INSERT_CNH;
       break;
+    case MENU_IDS.CNPJ:
+      action = ACTIONS.INSERT_CNPJ;
+      break;
     case MENU_IDS.PLATE:
       action = ACTIONS.INSERT_PLATE;
       break;
     case MENU_IDS.OLD_PLATE:
       action = ACTIONS.INSERT_OLD_PLATE;
+      break;
+    case MENU_IDS.GENERATE_USERNAME:
+      action = ACTIONS.GENERATE_USERNAME;
+      break;
+    case MENU_IDS.LOREM_IPSUM:
+      action = ACTIONS.GENERATE_LOREM;
       break;
     case MENU_IDS.GENERATE_INT:
       action = ACTIONS.GENERATE_INT;
