@@ -737,7 +737,7 @@ function fillCurrentForm() {
         else if (token.includes('email')) value = generateEmail();
         else if (token.includes('tel') || token.includes('telefone') || token.includes('phone') || token.includes('celular') || token.includes('cel') || type === 'tel') value = generatePhone();
         else if (token.includes('usuario') || token.includes('username') || token.includes('user') || token.includes('login')) value = generateUsername();
-        else if (token.includes('nome') || token.includes('name') || token.includes('fullname') || token.includes('full name') || token.includes('bairro') || token.includes('neighborhood') || token.includes('address') || token.includes('endereco')) value = generateName();
+        else if (token.includes('nome') || token.includes('name') || token.includes('fullname') || token.includes('empresa') || token.includes('full name') || token.includes('bairro') || token.includes('neighborhood') || token.includes('address') || token.includes('endereco')) value = generateName();
         else if ((token.includes('cidade') && token.includes('uf')) || token.includes('cityuf')) value = generateCityUf();
         else if (token.includes('cidade') || token.includes('city')) value = generateCity();
         //se for state ou estado mas tiver maxleng =2, gerar UF
