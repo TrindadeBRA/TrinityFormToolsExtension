@@ -10,6 +10,7 @@ const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 // Message actions from background script
 const ACTIONS = {
   INSERT_CPF: "insertCpf",
+  INSERT_CNPJ: "insertCnpj",
   INSERT_EMAIL: "insertEmail",
   INSERT_PHONE: "insertPhone",
   INSERT_NAME: "insertName",
@@ -1016,6 +1017,9 @@ function handleMessage(message) {
   switch (message.action) {
     case ACTIONS.INSERT_CPF:
       value = generateCPF();
+      break;
+    case ACTIONS.INSERT_CNPJ:
+      value = generateCNPJ();
       break;
     case ACTIONS.INSERT_EMAIL:
       value = generateEmail();

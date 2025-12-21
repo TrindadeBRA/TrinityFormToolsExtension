@@ -14,6 +14,7 @@ const MENU_IDS = {
   GROUP_CIDADE: "group-cidade",
   GROUP_NUMEROS: "group-numeros",
   CPF: "insert-cpf",
+  CNPJ: "insert-cnpj",
   EMAIL: "insert-email",
   PHONE: "insert-phone",
   NAME: "insert-name",
@@ -56,6 +57,7 @@ const MENU_TITLES = {
   CIDADE: "Cidade",
   NUMEROS: "Números",
   CPF: "Inserir CPF",
+  CNPJ: "Inserir CNPJ",
   EMAIL: "Inserir Email",
   PHONE: "Inserir Telefone",
   NAME: "Inserir Nome",
@@ -94,6 +96,7 @@ const MENU_TITLES = {
 // Message actions
 const ACTIONS = {
   INSERT_CPF: "insertCpf",
+  INSERT_CNPJ: "insertCnpj",
   INSERT_EMAIL: "insertEmail",
   INSERT_PHONE: "insertPhone",
   INSERT_NAME: "insertName",
@@ -218,6 +221,9 @@ function handleContextMenuClick(info, tab) {
   switch (info.menuItemId) {
     case MENU_IDS.CPF:
       action = ACTIONS.INSERT_CPF;
+      break;
+    case MENU_IDS.CNPJ:
+      action = ACTIONS.INSERT_CNPJ;
       break;
     case MENU_IDS.EMAIL:
       action = ACTIONS.INSERT_EMAIL;
