@@ -32,6 +32,12 @@ const MENU_IDS = {
   GET_CITY_UF: "get-city-uf",
   CNH: "insert-cnh",
   CNPJ: "insert-cnpj",
+  SELECT_IBGE: "select-ibge",
+  INSERT_IBGE: "insert-ibge",
+  SELECT_IBGE_STATE: "select-ibge-state",
+  INSERT_IBGE_STATE: "insert-ibge-state",
+  SELECT_DDD: "select-ddd",
+  INSERT_DDD: "insert-ddd",
   PLATE: "insert-plate",
   OLD_PLATE: "insert-old-plate",
   GENERATE_USERNAME: "generate-username",
@@ -169,7 +175,9 @@ function initializeContextMenus() {
   browserAPI.contextMenus.create({ id: MENU_IDS.PLATE, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.PLATE, contexts: ["editable"] });
   browserAPI.contextMenus.create({ id: MENU_IDS.OLD_PLATE, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.OLD_PLATE, contexts: ["editable"] });
   browserAPI.contextMenus.create({ id: MENU_IDS.GENERATE_USERNAME, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.GENERATE_USERNAME, contexts: ["editable"] });
-  browserAPI.contextMenus.create({ id: MENU_IDS.LOREM_IPSUM, parentId: MENU_IDS.GROUP_DADOS, title: MENU_TITLES.LOREM_IPSUM, contexts: ["editable"] });
+
+  // Lorem Ipsum moved to root menu (no parent) per request
+  browserAPI.contextMenus.create({ id: MENU_IDS.LOREM_IPSUM, title: MENU_TITLES.LOREM_IPSUM, contexts: ["editable"] });
 
   // Data -> date/time items
   browserAPI.contextMenus.create({ id: MENU_IDS.DATE, parentId: MENU_IDS.GROUP_DATA, title: MENU_TITLES.DATE, contexts: ["editable"] });
