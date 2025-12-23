@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "TrinityForm",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Preencha formulários rapidamente com dados de teste realistas: CPF, CNPJ válidos, nome, e-mail e telefone brasileiro (com DDD).",
   "author": "Trinity Web",
   "permissions": [

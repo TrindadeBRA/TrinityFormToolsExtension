@@ -1,6 +1,6 @@
 {
   "name": "trinity-form-tools",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Extensão para preencher formulários com dados de teste brasileiros",
   "license": "MIT",
   "scripts": {
