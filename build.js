@@ -42,6 +42,7 @@ console.log(`   Manifest: ${manifestFile}`);
 const files = [
   'background.js',
   'content-script.js',
+  'cidades_brasil.js',
   'icon48.png',
   'icon96.png',
   'favicon.webp'
