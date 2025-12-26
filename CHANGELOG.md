@@ -5,6 +5,12 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [1.3.1] - 2025-12-26
+
+### Ajustado
+- Adicionado `cidades_brasil.js` ao processo de build para garantir que o arquivo seja incluído no pacote da extensão
+
+
 ## [1.3.0] - 2025-12-21
 
 ### Adicionado
